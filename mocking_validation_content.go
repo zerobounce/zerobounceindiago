@@ -1,4 +1,4 @@
-package zerobouncego
+package zerobounceindiago
 
 var MOCK_VALIDATE_RESPONSE = map[string]string{
 	"disposable@example.com": `{

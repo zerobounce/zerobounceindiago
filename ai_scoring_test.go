@@ -1,6 +1,6 @@
 // The test cases in this file
 
-package zerobouncego
+package zerobounceindiago
 
 import (
 	"errors"

@@ -5,18 +5,18 @@ Go implementation for [ZeroBounce Email Validation API v2](https://www.zerobounc
 
 ## Installation and Usage
 ```sh
-go get github.com/zerobounce/zerobouncego
+go get github.com/zerobounce/zerobounceindiago
 ```
 
 This package uses the zero-bounce API which requires an API key. This key can be provide in three ways:
 1. through an environment variable `ZERO_BOUNCE_API_KEY` (loaded automatically in code)
 2. through an .env file that contains `ZERO_BOUNCE_API_KEY` and then calling following method before usage:
 ```go
-zerobouncego.ImportApiKeyFromEnvFile()
+zerobounceindiago.ImportApiKeyFromEnvFile()
 ```
 3. by settings explicitly in code, using the following method:
 ```go
-zerobouncego.SetApiKey("mysecretapikey")
+zerobounceindiago.SetApiKey("mysecretapikey")
 ```
 
 ## Generic API methods
@@ -28,14 +28,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zerobounce/zerobouncego"
+	"github.com/zerobounce/zerobounceindiago"
 )
 
 func main() {
-	zerobouncego.SetApiKey("... Your API KEY ...")
+	zerobounceindiago.SetApiKey("... Your API KEY ...")
 
 	// Check your account's credits
-	credits, error_ := zerobouncego.GetCredits()
+	credits, error_ := zerobounceindiago.GetCredits()
 	if error_ != nil {
 		fmt.Println("Error from credits: ", error_.Error())
 	} else {
@@ -45,7 +45,7 @@ func main() {
 	// Check your account's usage of the API
 	start_time := time.Date(2023, 1, 1, 0, 0, 0, 0, time.Local)
 	end_time := time.Now()
-	usage, error_ := zerobouncego.GetApiUsage(start_time, end_time)
+	usage, error_ := zerobounceindiago.GetApiUsage(start_time, end_time)
 	if error_ != nil {
 		fmt.Println("Error from API usage: ", error_.Error())
 	} else {
@@ -65,27 +65,27 @@ package main
 import (
     "fmt"
     "os"
-    "github.com/zerobounce/zerobouncego"
+    "github.com/zerobounce/zerobounceindiago"
 )
 
 func main() {
 
-    zerobouncego.APIKey = "... Your API KEY ..."
+    zerobounceindiago.APIKey = "... Your API KEY ..."
 
 	// For Querying a single E-Mail and IP
 	// IP can also be an empty string
-	response, error_ := zerobouncego.Validate("possible_typo@example.com", "123.123.123.123")
+	response, error_ := zerobounceindiago.Validate("possible_typo@example.com", "123.123.123.123")
 
 	if error_ != nil {
 		fmt.Println("error occurred: ", error_.Error())
 	} else {
 		// Now you can check status
-		if response.Status == zerobouncego.S_INVALID {
+		if response.Status == zerobounceindiago.S_INVALID {
 			fmt.Println("This email is valid")
 		}
 
 		// .. or Sub-status
-		if response.SubStatus == zerobouncego.SS_POSSIBLE_TYPO {
+		if response.SubStatus == zerobounceindiago.SS_POSSIBLE_TYPO {
 			fmt.Println("This email might have a typo")
 		}
 	}
@@ -100,20 +100,20 @@ package main
 import (
 	"fmt"
 
-	"github.com/zerobounce/zerobouncego"
+	"github.com/zerobounce/zerobounceindiago"
 )
 
 func main() {
-	zerobouncego.SetApiKey("... Your API KEY ...")
+	zerobounceindiago.SetApiKey("... Your API KEY ...")
 
-	emails_to_validate := []zerobouncego.EmailToValidate{
+	emails_to_validate := []zerobounceindiago.EmailToValidate{
 		{EmailAddress: "disposable@example.com", IPAddress: "99.110.204.1"},
 		{EmailAddress: "invalid@example.com", IPAddress: "1.1.1.1"},
 		{EmailAddress: "valid@example.com"},
 		{EmailAddress: "toxic@example.com"},
 	}
 
-	response, error_ := zerobouncego.ValidateBatch(emails_to_validate)
+	response, error_ := zerobounceindiago.ValidateBatch(emails_to_validate)
 	if error_ != nil {
 		fmt.Println("error ocurred while batch validating: ", error_.Error())
 	} else {
@@ -140,12 +140,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/zerobounce/zerobouncego"
+	"github.com/zerobounce/zerobounceindiago"
 )
 
 
 func main() {
-	zerobouncego.SetApiKey("... Your API KEY ...")
+	zerobounceindiago.SetApiKey("... Your API KEY ...")
 	import_file_path := "PATH_TO_CSV_TO_IMPORT"
 	result_file_path := "PATH_TO_CSV_TO_EXPORT"
 
@@ -156,18 +156,18 @@ func main() {
 	}
 
 	defer file.Close()
-	csv_file := zerobouncego.CsvFile{
+	csv_file := zerobounceindiago.CsvFile{
 		File: file, HasHeaderRow: false, EmailAddressColumn: 1, FileName: "emails.csv",
 	}
-	submit_response, error_ := zerobouncego.BulkValidationSubmit(csv_file, false)
+	submit_response, error_ := zerobounceindiago.BulkValidationSubmit(csv_file, false)
 	if error_ != nil {
 		fmt.Println("error while submitting data: ", error_.Error())
 		return
 	}
 
 	fmt.Println("submitted file ID: ", submit_response.FileId)
-	var file_status *zerobouncego.FileStatusResponse
-	file_status, _ = zerobouncego.BulkValidationFileStatus(submit_response.FileId)
+	var file_status *zerobounceindiago.FileStatusResponse
+	file_status, _ = zerobounceindiago.BulkValidationFileStatus(submit_response.FileId)
 	fmt.Println("file status: ", file_status.FileStatus)
 	fmt.Println("completion percentage: ", file_status.Percentage(), "%")
 
@@ -181,7 +181,7 @@ func main() {
 			seconds_waited += 1
 		}
 
-		file_status, error_ = zerobouncego.BulkValidationFileStatus(submit_response.FileId)
+		file_status, error_ = zerobounceindiago.BulkValidationFileStatus(submit_response.FileId)
 		if error_ != nil {
 			fmt.Print()
 			fmt.Print("error ocurred while polling for status: ", error_.Error())
@@ -198,7 +198,7 @@ func main() {
 		fmt.Println("error on creating result file: ", error_.Error())
 		return
 	}
-	error_ = zerobouncego.BulkValidationResult(submit_response.FileId, result_file)
+	error_ = zerobounceindiago.BulkValidationResult(submit_response.FileId, result_file)
 	defer result_file.Close()
 	if error_ != nil {
 		fmt.Println("error on fetch validation result: ", error_.Error())
@@ -207,7 +207,7 @@ func main() {
 	fmt.Printf("Saved validation result at path: %s\n", result_file_path)
 
 	// delete result file, after saving
-	delete_status, error_ := zerobouncego.BulkValidationFileDelete(file_status.FileId)
+	delete_status, error_ := zerobounceindiago.BulkValidationFileDelete(file_status.FileId)
 	if error_ != nil {
 		fmt.Println("error on fetch file delete: ", error_.Error())
 		return
@@ -249,13 +249,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/zerobounce/zerobouncego"
+	"github.com/zerobounce/zerobounceindiago"
 )
 
 
 func main() {
-	zerobouncego.SetApiKey("... Your API KEY ...")
-	zerobouncego.ImportApiKeyFromEnvFile()
+	zerobounceindiago.SetApiKey("... Your API KEY ...")
+	zerobounceindiago.ImportApiKeyFromEnvFile()
 	import_file_path := "./emails.csv"
 	result_file_path := "./validation_result.csv"
 
@@ -266,18 +266,18 @@ func main() {
 	}
 
 	defer file.Close()
-	csv_file := zerobouncego.CsvFile{
+	csv_file := zerobounceindiago.CsvFile{
 		File: file, HasHeaderRow: false, EmailAddressColumn: 1, FileName: "emails.csv",
 	}
-	submit_response, error_ := zerobouncego.AiScoringFileSubmit(csv_file, false)
+	submit_response, error_ := zerobounceindiago.AiScoringFileSubmit(csv_file, false)
 	if error_ != nil {
 		fmt.Println("error while submitting data: ", error_.Error())
 		return
 	}
 
 	fmt.Println("submitted file ID: ", submit_response.FileId)
-	var file_status *zerobouncego.FileStatusResponse
-	file_status, _ = zerobouncego.AiScoringFileStatus(submit_response.FileId)
+	var file_status *zerobounceindiago.FileStatusResponse
+	file_status, _ = zerobounceindiago.AiScoringFileStatus(submit_response.FileId)
 	fmt.Println("file status: ", file_status.FileStatus)
 	fmt.Println("completion percentage: ", file_status.Percentage(), "%")
 
@@ -291,7 +291,7 @@ func main() {
 			seconds_waited += 1
 		}
 
-		file_status, error_ = zerobouncego.AiScoringFileStatus(submit_response.FileId)
+		file_status, error_ = zerobounceindiago.AiScoringFileStatus(submit_response.FileId)
 		if error_ != nil {
 			fmt.Print()
 			fmt.Print("error ocurred while polling for status: ", error_.Error())
@@ -308,7 +308,7 @@ func main() {
 		fmt.Println("error on creating result file: ", error_.Error())
 		return
 	}
-	error_ = zerobouncego.AiScoringResult(submit_response.FileId, result_file)
+	error_ = zerobounceindiago.AiScoringResult(submit_response.FileId, result_file)
 	defer result_file.Close()
 	if error_ != nil {
 		fmt.Println("error on fetch validation result: ", error_.Error())
@@ -317,7 +317,7 @@ func main() {
 	fmt.Printf("Saved validation result at path: %s\n", result_file_path)
 
 	// delete result file, after saving
-	delete_status, error_ := zerobouncego.AiScoringFileDelete(file_status.FileId)
+	delete_status, error_ := zerobounceindiago.AiScoringFileDelete(file_status.FileId)
 	if error_ != nil {
 		fmt.Println("error on fetch file delete: ", error_.Error())
 		return

@@ -1,4 +1,4 @@
-module github.com/zerobounce/zerobouncego
+module github.com/zerobounce/zerobounceindiago
 
 go 1.16
 

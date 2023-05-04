@@ -2,7 +2,7 @@
 // In order to mock this endpoint, responses will be provided based on
 // the file names (skipping their contents) thus simulating file upload.
 
-package zerobouncego
+package zerobounceindiago
 
 import (
 	"errors"
