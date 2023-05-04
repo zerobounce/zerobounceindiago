@@ -17,8 +17,8 @@ import (
 // CONSTANTS
 
 const (
-	URI                     = `https://api.zerobounce.net/v2/`
-	BULK_URI                = `https://bulkapi.zerobounce.net/v2/`
+	URI                     = `https://api.zerobounce.in/v2/`
+	BULK_URI                = `https://bulkapi.zerobounce.in/v2/`
 	ENDPOINT_CREDITS        = "/getcredits"
 	ENDPOINT_ACTIVITY_DATA  = "/activity"
 	ENDPOINT_VALIDATE       = "/validate"
